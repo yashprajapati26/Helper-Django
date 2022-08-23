@@ -1,0 +1,38 @@
+
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+
+    <main class="login-body" data-vide-bg="{% static 'img/otp.jpg' %}">
+
+        
+        <!-- Login Admin -->
+        <form class="form-default" action="{% url 'helper_app:verifyotp' %}" method="POST">
+            {% csrf_token %}
+            <div class="login-form">
+                <!-- logo-login -->
+                
+                <div class="logo-login">
+                    <a href="index.html"><img src="{% static 'img/logo/logo_loder.png' %}" alt=""></a>
+                </div>
+                <h2>Enter OTP Here</h2>
+                <div class="form-input">
+                    <label for="name">OTP</label>
+                    <input  type="text" name="otp" placeholder="Enter Your OTP">{% if msg %}<p class="alert alert-info">{{msg}}</p>{% endif %}
+                </div>
+                <input type="hidden" name="email" value="{{email}}">
+                <div class="form-input pt-30">
+                    <input type="submit" name="submit" value="login">
+                </div>
+                
+                <!-- Forget Password -->
+                <a href="#" class="forget">Resend OTP.</a>
+               
+            </div>
+        </form>
+        <!-- /end login form -->
+    </main>
+
+  
+
+{% endblock content %}

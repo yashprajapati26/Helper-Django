@@ -1,0 +1,187 @@
+    {% extends 'header.html' %}
+    {% load static %}
+    {% block content %}
+    <style>
+        .cat_img {
+            height: 130px;
+            width: 180px;
+
+            border-radius: 10%;
+        }
+    </style>
+    <main>
+        <!--? slider Area Start-->
+        <section class="slider-area ">
+            <div class="slider-active">
+                <!-- Single Slider -->
+                <div class="single-slider slider-height d-flex align-items-center">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-7 col-md-12">
+                                <div class="hero__caption">
+                                    <h1 data-animation="fadeInLeft" data-delay="0.2s">Home Service<br> On Demand</h1>
+                                    <p data-animation="fadeInLeft" data-delay="0.4s">Beauty, Repair, Cleaning, Grooming,
+                                        Painting, Spa & More Services by Expert Professionals. One stop solution for
+                                        your household needs. Get 100% safe service by verified partners.</p>
+                                    <a href="#" class="btn hero-btn" data-animation="fadeInLeft" data-delay="0.7s">Book
+                                        Service Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ? services-area -->
+        <div class="services-area" style="margin-top:40px;">
+            <div class="container">
+                <div class="row justify-content-sm-center">
+                    {% for cat in all_cats %}
+                    <div class="col-lg-4 col-md-6 col-sm-8">
+                        <div class="single-services mb-30" style="background: #fbe3f8ad;">
+                            <div class="features-icon">
+                                <img class="cat_img" src="{{cat.category_image.url}}" alt="">
+                            </div>
+                            <div class="features-caption" style="padding-top:inherit;">
+                                <h3 class="mt-4">{{cat.category_name}}</h3>
+                                {% comment %} <p>The automated process all your website tasks.</p> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+            <!-- Courses area start -->
+            <div class="courses-area section-padding40 fix">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-7 col-lg-8">
+                            <div class="section-tittle text-center mb-55">
+                                <h2>Our Services</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="courses-actives">
+                        {% for service in all_services %}
+                        <!-- Single -->
+                        <div class="properties pb-20">
+                            <div class="properties__card">
+                                <div class="properties__img overlay1">
+                                    <a href="#"><img src="{{service.service_image.url}}" height=250px; alt=""></a>
+                                </div>
+                                <div class="properties__caption">
+                                    <p>{{service.category.category_name}}</p>
+                                    <h3><a href="#">{{service.service_name}}</a></h3>
+                                    <p>
+                                        {{service.description|linebreaks|truncatechars:100 }}
+
+                                    </p>
+                                    <div class="properties__footer d-flex justify-content-between align-items-center">
+                                        <div class="restaurant-name">
+                                            <div class="rating">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star-half"></i>
+                                            </div>
+                                            <p><span>(4.5)</span> based on 120</p>
+                                        </div>
+                                        <div class="price">
+                                            <span> ₹ {{service.price}} </span>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="border-btn border-btn2">Find out more</a>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- Single -->
+                        {% endfor %}
+                       
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-xl-12">
+                            <div class="section-tittle text-center mt-20">
+                                <a href="{% url 'helper_app:services' %}" class="border-btn">View More Service's</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Courses area End -->
+            <!--? About Area-1 Start -->
+            <section class="about-area1 fix pt-10">
+                {{what_we_are.content|safe}}
+            </section>
+
+
+            <!--? Team -->
+            <section class="team-area section-padding40 fix">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-7 col-lg-8">
+                            <div class="section-tittle text-center mb-55">
+                                <h2>Community experts</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-active">
+                        <div class="single-cat text-center">
+                            <div class="cat-icon">
+                                <img src="{% static 'img/gallery/team1.png' %}" alt="">
+                            </div>
+                            <div class="cat-cap">
+                                <h5><a href="services.html">Mr. Urela</a></h5>
+                                <p>The automated process all your website tasks.</p>
+                            </div>
+                        </div>
+                        <div class="single-cat text-center">
+                            <div class="cat-icon">
+                                <img src="{% static 'img/gallery/team2.png' %}" alt="">
+                            </div>
+                            <div class="cat-cap">
+                                <h5><a href="services.html">Mr. Uttom</a></h5>
+                                <p>The automated process all your website tasks.</p>
+                            </div>
+                        </div>
+                        <div class="single-cat text-center">
+                            <div class="cat-icon">
+                                <img src="{% static 'img/gallery/team3.png' %}" alt="">
+                            </div>
+                            <div class="cat-cap">
+                                <h5><a href="services.html">Mr. Shakil</a></h5>
+                                <p>The automated process all your website tasks.</p>
+                            </div>
+                        </div>
+                        <div class="single-cat text-center">
+                            <div class="cat-icon">
+                                <img src="{% static 'img/gallery/team4.png' %}" alt="">
+                            </div>
+                            <div class="cat-cap">
+                                <h5><a href="services.html">Mr. Arafat</a></h5>
+                                <p>The automated process all your website tasks.</p>
+                            </div>
+                        </div>
+                        <div class="single-cat text-center">
+                            <div class="cat-icon">
+                                <img src="{% static 'img/gallery/team3.png' %}" alt="">
+                            </div>
+                            <div class="cat-cap">
+                                <h5><a href="services.html">Mr. saiful</a></h5>
+                                <p>The automated process all your website tasks.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Services End -->
+            <!--? About Area-2 Start -->
+
+            <section class="about-area2 fix pb-padding">
+                {{how_we_do_it.content|safe}}
+            </section>
+    </main>
+
+    {% endblock content %}
