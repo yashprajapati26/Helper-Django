@@ -19,7 +19,7 @@ from django.template.loader import render_to_string
 
 def index(request):
     all_cats = Service_category.objects.all()
-    all_services = Service.objects.filter(is_approved=True,is_active="Active")
+    all_services = Service.objects.filter(is_approved=True,is_active=True)
     
     context = {'all_cats':all_cats,'all_services':all_services}
     context['how_we_do_it'] = pages_content.objects.get(name="how_we_do_it")

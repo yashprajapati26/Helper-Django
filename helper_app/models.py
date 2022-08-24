@@ -87,7 +87,7 @@ Status = (('Active','Active'),('Inactive','Inactive'))
 
 class Custom_ServiceManager(models.Manager):
     def get_queryset(self):
-        complexQuery = Q(is_approved=True) & Q(is_active="Active")
+        complexQuery = Q(is_approved=True) & Q(is_active=True)
         return super().get_queryset().filter(complexQuery)
 
 
@@ -102,7 +102,8 @@ class Service(models.Model):
     city = models.CharField(max_length=255)
     location = PlainLocationField(based_fields=['city'], zoom=7)
     is_approved = models.BooleanField(default=False)
-    is_active = models.CharField(max_length=20,choices=Status,default="Active")
+    is_active = models.BooleanField(default=False)
+    vendor = models.ForeignKey(User,on_delete=models.CASCADE)
 
     objects = models.Manager()
     activate = Custom_ServiceManager()

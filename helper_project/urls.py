@@ -26,6 +26,9 @@ urlpatterns = [
 
     path('', include("helper_app.urls")),
     path('vendor/', include("vendor_app.urls")),
+
+    # api app url 
+    path('api/', include("api_app.urls")),
 ]
 
 if settings.DEBUG:

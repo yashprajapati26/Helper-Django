@@ -5,7 +5,11 @@ from django.utils.safestring import mark_safe
 from django.contrib.admin.widgets import AdminFileWidget
 from django.utils.html import format_html
 from django.db import models
-
+from django.urls import path
+from django.urls import reverse
+from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 
 
 class AdminImageWidget(AdminFileWidget):
@@ -57,14 +61,57 @@ class ServiceAdmin(admin.ModelAdmin):
         models.FileField: {'widget': AdminImageWidget}
     }
     list_display = [
-        "image","service_name","category","price","service_time","is_active","is_approved"
+        "image","service_name","category","price","service_time","is_active","is_approved","action_button"
     ]
 
+
+    def get_urls(self):
+        urls = super(ServiceAdmin, self).get_urls()
+
+        my_urls = [
+            path('accept/<int:service_id>/', self.admin_site.admin_view(self.accept), name="accept"),
+            path('reject/<int:service_id>/', self.admin_site.admin_view(self.reject), name="reject"),
+        ]
+
+        return my_urls + urls
+
+    def accept(self, request, service_id):
+        service = Service.objects.filter(id=service_id)
+        service.update(is_approved = True)
+        messages.success(request,f"Approved Service '{service.first().service_name}' ")
+        #return HttpResponseRedirect(request.path_info)
+        return redirect(request.META.get('HTTP_REFERER'))
+
+
+    def reject(self, request, service_id):
+        service = Service.objects.filter(id=service_id)
+        service.update(is_approved = False)
+        messages.success(request,f"Reject Service '{service.first().service_name}' ")
+        #return HttpResponseRedirect(request.path_info) # for same url 
+        return redirect(request.META.get('HTTP_REFERER'))
+
+
+
+
+    def action_button(self, obj):
+        if obj.is_approved:
+            new_url = reverse("admin:reject", kwargs= {"service_id":obj.id})
+            print(new_url)
+            return format_html(u"""<p class='deletelink-box'><a href={0} class="deletelink">Reject</a></p>""", new_url)
+        else:
+            new_url = reverse("admin:accept", kwargs= {"service_id":obj.id})
+            print(new_url)
+            return format_html(u"""<p class=""><img src="/static/admin/img/icon-yes.svg" alt="True"><a href={0} class="acceptlink" style="color:green;"> Accept</a></p>""", new_url)
+
+    action_button.short_description = 'Action'
+    action_button.allow_tags = True
 
     def image(self, obj):
             return format_html('<img src="{}" height=50px; width=70px />'.format(obj.service_image.url))
 
     # image_tag.short_description = 'Image'
+
+    
 
 admin.site.register(Service,ServiceAdmin)
 

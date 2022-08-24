@@ -7,5 +7,6 @@ urlpatterns = [
 
     path("",views.HomeView.as_view(),name="home"),
     path("addservice/",views.AddServiceView.as_view(),name="addservice"),
+    path("myservices/",views.MyServicesView.as_view(),name="myservices"),
    
 ]
