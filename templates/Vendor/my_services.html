@@ -37,7 +37,7 @@
                 <div class="visit">category</div>
                 <div class="country">Service</div>
                 <div class="visit">Price</div>
-                <div class="visit">Is active</div>
+                <div class="visit">Is Approved</div>
 
             </div>
             {% for i in services %}
@@ -49,7 +49,7 @@
                 <div class="visit">{{i.price}}</div>
                 <div class="switch-wrap d-flex justify-content-between">
                     <div class="confirm-switch">
-                        <input type="checkbox" id="confirm-switch" {% if i.is_active %} checked {% else %} {% endif %} disabled>
+                        <input type="checkbox" id="confirm-switch" {% if i.is_approved %} checked {% else %} {% endif %} disabled>
                         <label for="confirm-switch"></label>
                     </div>
                 </div>

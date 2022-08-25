@@ -25,9 +25,11 @@ class AddServiceView(View):
     def post(self,request):
         context = {}
         service_form = ServiceForm(request.POST,request.FILES)
+
         if service_form.is_valid():
-            
-            obj = service_form.save()
+            obj = service_form.save(commit=False)
+            obj.vendor = request.user
+            obj.save()
             return HttpResponse("Add sucessfully")
         else:
             return HttpResponse("Something is wrong")

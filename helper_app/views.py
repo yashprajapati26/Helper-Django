@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
+from django.core.mail import send_mail, BadHeaderError
 from django.urls import reverse
 from django.views import View
 from helper_app.models import User,OtpVerification
@@ -14,10 +16,20 @@ from helper_app.models import *
 from dyanamic_app.models import pages_content
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.template.loader import render_to_string
-
+from django.db.models.query_utils import Q
+from django.db.models import OuterRef
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from django.contrib.auth.forms import PasswordResetForm
+from helper_app.decorators import user_is_vendor
 # Create your views here.
 
+@user_is_vendor
 def index(request):
+    # if request.user.user_type == "vendor":
+    #     return redirect("vendor_app:home")
+
     all_cats = Service_category.objects.all()
     all_services = Service.objects.filter(is_approved=True,is_active=True)
     
@@ -76,6 +88,39 @@ class RegisterView(View):
             return HttpResponse('''<center><div class="PartnerDetailsWidget__successMessage--2AcGg"><div class="LazyLoadImage__imageContainer--3EOU_ PartnerDetailsWidget__successIcon--C1ZIx"><div class="TemplateShimmer__shimmer--1HNwN TemplateShimmer__shimmerWrapper--Py2CJ TemplateShimmer__hidden--1oL9u"></div><img class="" src="https://s3-ap-southeast-1.amazonaws.com/urbanclap-prod/categories/category_v2/category_b24bd230.svg" alt="" itemscope="" itemprop="image"></div><span class="PartnerDetailsWidget__message--3NeRq">Thank you, we have received your details. Our team will get in touch with you soon.<a href="/">Go To Home Page</a></center>''')
         else:
             return redirect(request.META['HTTP_REFERER'])
+
+
+
+class password_reset_request(View):
+    def get(self,request):
+        password_reset_form = PasswordResetForm()
+        return render(request, template_name="Admin/password_reset.html", context={"password_reset_form":password_reset_form})
+        
+    def post(self,request):
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Password Reset Requested"
+                    email_template_name = "Admin/password_reset_email.txt"
+                    sender = settings.EMAIL_HOST_USER
+                    c = {
+                        "email":user.email,
+                        'domain':'127.0.0.1:8000',
+                        'site_name': 'Website',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, sender , [user.email], fail_silently=False)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect ("/password_reset/done/")
 
 
 class LogoutView(View):
@@ -147,8 +192,21 @@ def load_more_service(request):
             "status": "success",
             "next": next_url
         })
+from django.db.models import Count
 
-
+class ServiceDetailsView(View):
+    def get(self,request,service_id):
+        context = {}
+        service = Service.objects.get(pk=service_id)
+        context['service'] = service
+        context['related_service'] = Service.objects.filter(category=service.category)
+        # context['category'] = Service_category.objects.all().annotate(counts = SubqueryCount(
+        #     Service.objects.filter(category=OuterRef("pk")))).exclude(counts=0)
+            #  ^
+            # both same
+            #  v
+        context['category'] = Service_category.objects.annotate(counts = Count("service_cat")).exclude(counts=0)
+        return render(request,"service_details.html",context)
 
 
 

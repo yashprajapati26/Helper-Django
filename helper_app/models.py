@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser,BaseUserManager
-from django.db.models import Q
+from django.db.models import Q,Subquery,PositiveIntegerField
 from django.utils.translation import gettext_lazy as _
 from location_field.models.plain import PlainLocationField
 # Create your models here.
@@ -10,6 +10,9 @@ USER_TYPE = (
     ("vendor", "vendor")
 )
 
+class SubqueryCount(Subquery):
+    template = "(SELECT count(*) FROM (%(subquery)s) _count)"
+    output_field = PositiveIntegerField()
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -94,7 +97,7 @@ class Custom_ServiceManager(models.Manager):
 
 class Service(models.Model):
     service_image = models.FileField(upload_to="service/",null=True,blank=True,default="default.png")
-    category = models.ForeignKey(Service_category,on_delete=models.CASCADE)
+    category = models.ForeignKey(Service_category, related_name="service_cat", on_delete=models.CASCADE)
     service_name = models.CharField(max_length=100)
     price = models.FloatField()
     service_time = models.PositiveIntegerField(null=True,blank=True)
@@ -102,7 +105,7 @@ class Service(models.Model):
     city = models.CharField(max_length=255)
     location = PlainLocationField(based_fields=['city'], zoom=7)
     is_approved = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     vendor = models.ForeignKey(User,on_delete=models.CASCADE)
 
     objects = models.Manager()

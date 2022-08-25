@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'dyanamic_app',
     'ckeditor',
     'ckeditor_uploader',
-    
+    'crispy_forms',
     # for api app and 3rd party app 
     'api_app',
     'rest_framework',
