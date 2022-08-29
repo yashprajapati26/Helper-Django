@@ -225,7 +225,7 @@ LOCATION_FIELD = {
 #         ),
 #     },
 # }
-GEOS_LIBRARY_PATH = ''
+# GEOS_LIBRARY_PATH = ''
 
 
 ##############################################
