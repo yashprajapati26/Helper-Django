@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
 
 # Application definition
 
@@ -45,6 +47,11 @@ INSTALLED_APPS = [
     'dyanamic_app',
     'ckeditor',
     'ckeditor_uploader',
+    'crispy_forms',
+    # for api app and 3rd party app 
+    'api_app',
+    'rest_framework',
+    'knox',
 ]
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -219,3 +226,18 @@ LOCATION_FIELD = {
 #     },
 # }
 GEOS_LIBRARY_PATH = ''
+
+
+##############################################
+######  for Django rest api permissions ######
+##############################################
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'knox.auth.TokenAuthentication',
+    ]
+}
+
+
+APPEND_SLASH=False

@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from helper_app.models import Service_category
+from helper_app.models import Service_category,Service
 from django.views import View
 from vendor_app.forms import ServiceForm
 # Create your views here.
@@ -25,9 +25,18 @@ class AddServiceView(View):
     def post(self,request):
         context = {}
         service_form = ServiceForm(request.POST,request.FILES)
+
         if service_form.is_valid():
-            
-            obj = service_form.save()
+            obj = service_form.save(commit=False)
+            obj.vendor = request.user
+            obj.save()
             return HttpResponse("Add sucessfully")
         else:
             return HttpResponse("Something is wrong")
+
+class MyServicesView(View):
+    def get(self,request):
+        context = {}
+        context['services'] = Service.objects.filter(vendor=request.user)
+        print(context['services'])
+        return render(request,"Vendor/my_services.html",context)

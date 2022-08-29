@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Courses | Education</title>
+    <title>Welcome Vendor | Helper</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="site.webmanifest">
@@ -52,7 +52,7 @@
                             <!-- Logo -->
                             <div class="col-xl-2 col-lg-2">
                                 <div class="logo">
-                                    <a href="/" style="font-weight: 900; font-family: 'Times New Roman', Times, serif; font-size:40px;"><img src="{% static 'img/logo/logo_new.png' %}" height=140px;></a>
+                                    <a href="{% url 'vendor_app:home' %}" style="font-weight: 900; font-family: 'Times New Roman', Times, serif; font-size:40px;"><img src="{% static 'img/logo/logo_new.png' %}" height=140px;></a>
                                 </div>
                             </div>
                             <div class="col-xl-10 col-lg-10">
@@ -61,7 +61,7 @@
                                     <div class="main-menu d-none d-lg-block">
                                         <nav>
                                             <ul id="navigation">                                                                                          
-                                                <li><a href="courses.html">My Services</a></li>
+                                                <li><a href="{% url 'vendor_app:myservices' %}">My Services</a></li>
                                                 <li><a href="{% url 'vendor_app:addservice' %}">Add Service</a>
                                                     {% comment %} <ul class="submenu">
                                                         <li><a href="blog.html">Blog</a></li>

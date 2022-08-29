@@ -1,0 +1,69 @@
+    
+{% extends 'Vendor/header.html' %}
+{% load static %}
+{% block content %}
+<section class="slider-area slider-area2">
+    <div class="slider-active">
+        <!-- Single Slider -->
+        <div class="single-slider slider-height2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-8 col-lg-11 col-md-12">
+                        <div class="hero__caption hero__caption2">
+                            <h1 data-animation="bounceIn" data-delay="0.2s">My Services</h1>
+                            <!-- breadcrumb Start-->
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="#">My Services</a></li> 
+                                </ol>
+                            </nav>
+                            <!-- breadcrumb End -->
+                        </div>
+                    </div>
+                </div>
+            </div>          
+        </div>
+    </div>
+</section>
+<div class="whole-wrap">
+    <div class="container box_1170">
+<div class="section-top-border">
+    <h3 class="mb-30">Service Table</h3>
+    <div class="progress-table-wrap">
+        <div class="progress-table">
+            <div class="table-head">
+                <div class="serial">No</div>
+                <div class="visit">category</div>
+                <div class="country">Service</div>
+                <div class="visit">Price</div>
+                <div class="visit">Is Approved</div>
+
+            </div>
+            {% for i in services %}
+            <div class="table-row">
+                <div class="serial">{{forloop.counter}}</div>
+                <div class="visit">{{i.category.category_name}}</div>
+
+                <div class="country"> <img src="{{i.service_image.url}}" height=50px; width=70px; alt="flag">{{i.service_name}}</div>
+                <div class="visit">{{i.price}}</div>
+                <div class="switch-wrap d-flex justify-content-between">
+                    <div class="confirm-switch">
+                        <input type="checkbox" id="confirm-switch" {% if i.is_approved %} checked {% else %} {% endif %} disabled>
+                        <label for="confirm-switch"></label>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+  
+</script>
+
+{% endblock content %}
+    

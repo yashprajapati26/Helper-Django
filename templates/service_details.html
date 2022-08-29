@@ -1,0 +1,266 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<main>
+    <!--? slider Area Start-->
+    <section class="slider-area slider-area2">
+        <div class="slider-active">
+            <!-- Single Slider -->
+            <div class="single-slider slider-height2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-8 col-lg-11 col-md-12">
+                            <div class="hero__caption hero__caption2">
+                                <h1 data-animation="bounceIn" data-delay="0.2s">Service Details</h1>
+                                <!-- breadcrumb Start-->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="#">Service Details</a></li>
+                                    </ol>
+                                </nav>
+                                <!-- breadcrumb End -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--? Blog Area Start-->
+    <section class="blog_area section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 mb-5 mb-lg-0">
+                    <div class="blog_left_sidebar">
+                        <article class="blog_item">
+                            <div class="blog_item_img">
+                                <img class="card-img rounded-0" src="{{service.service_image.url}}" height=400px;  alt="">
+                                <a href="#" class="blog_item_date">
+                                    <h3> ₹ {{service.price}}</h3>
+
+                                </a>
+                            </div>
+                         
+                            <div class="blog_details" id="service_data">
+
+                                {% for service in related_service %}
+                              
+            
+                                        <div class="col-sm-12">
+                                            <div class="col-4">
+                                                <a href="{% url 'helper_app:service_details' service.id %}"><img
+                                                        src="{{service.service_image.url}}" height=150px; alt=""></a>
+                                                
+                                            </div>
+                                            <div class="col-6">
+                                                <p><i class="bi-tag-fill"></i> {{service.category.category_name}}</p>
+                                                <h3><a
+                                                        href="{% url 'helper_app:service_details' service.id %}">{{service.service_name}}</a>
+                                                </h3>
+                                                <p>{{service.description|linebreaks|truncatechars:100}}
+                                                </p>
+                                                <div
+                                                    class="properties__footer d-flex justify-content-between align-items-center">
+                                                   
+                                                    <div class="price">
+                                                        <span> ₹ {{service.price}}</span>
+                                                    </div>
+                                                </div>
+                                                <a href="{% url 'helper_app:service_details' service.id %}"
+                                                class="border-btn border-btn2" style="padding-right: 123px;
+                                                padding-left: 100px;">View</a>
+                                                
+                                            </div>
+                                
+                                               
+                                                
+                                            
+                                        </div>
+                                       
+                                   
+                                {% endfor %}
+
+                            </div>
+                    
+                        </article>
+
+                    </div>
+                </div>
+            
+            <div class="col-lg-5">
+                <div class="blog_right_sidebar">
+                    <div class="blog_details" style="padding-top:6px;">
+                        <a class="d-inline-block" href="blog_details.html">
+                            <h2 class="blog-head" style="color: #2d2d2d;">{{service.service_name}}</h2>
+                        </a>
+                        <ul class="blog-info-link mb-5">
+                            <li><a href="#"><i class="bi-tag-fill"></i> {{service.category.category_name}} </a></li>
+                        </ul>
+                        <p>{{service.description|linebreaks}}</p>
+                        <h2 class="blog-head" style="color: #2d2d2d;"> ₹ {{service.price}} </h2>
+
+
+                        <ul class="blog-info-link mt-5">
+                            <li><a href="#"><i class="bi-geo-alt-fill"></i> {{service.city}}</a></li>
+
+                            <li><a href="#"><i class="bi-clock"></i>{{service.service_time}} minuts</a></li>
+                        </ul>
+                        <ul class="blog-info-link mt-5">
+                            <li><button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
+                                    type="submit">Book service</button></li>
+                        </ul>
+                    </div>
+
+                    {% comment %} <aside class="single_sidebar_widget search_widget">
+                        <form action="#">
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder='Search Keyword'
+                                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Keyword'">
+                                    <div class="input-group-append">
+                                        <button class="btns" type="button"><i class="ti-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
+                                type="submit">Search</button>
+                        </form>
+                    </aside> {% endcomment %}
+                    <aside class="single_sidebar_widget post_category_widget">
+                        <h4 class="widget_title" style="color: #2d2d2d;">Category</h4>
+                        <ul class="list cat-list">
+                           {% for cat in category %}
+                            <li>
+                                <a href="#" class="d-flex">
+                                    <p>{{cat.category_name}}</p>
+                                    <p> ({{cat.counts}}) </p>
+                                </a>
+                            </li>
+                           {% endfor %}
+                        </ul>
+                    </aside>
+                    {% comment %} <aside class="single_sidebar_widget popular_post_widget">
+                        <h3 class="widget_title" style="color: #2d2d2d;">Recent Post</h3>
+                        <div class="media post_item">
+                            <img src="assets/img/post/post_1.png" alt="post">
+                            <div class="media-body">
+                                <a href="blog_details.html">
+                                    <h3 style="color: #2d2d2d;">From life was you fish...</h3>
+                                </a>
+                                <p>January 12, 2019</p>
+                            </div>
+                        </div>
+                        <div class="media post_item">
+                            <img src="assets/img/post/post_2.png" alt="post">
+                            <div class="media-body">
+                                <a href="blog_details.html">
+                                    <h3 style="color: #2d2d2d;">The Amazing Hubble</h3>
+                                </a>
+                                <p>02 Hours ago</p>
+                            </div>
+                        </div>
+                        <div class="media post_item">
+                            <img src="assets/img/post/post_3.png" alt="post">
+                            <div class="media-body">
+                                <a href="blog_details.html">
+                                    <h3 style="color: #2d2d2d;">Astronomy Or Astrology</h3>
+                                </a>
+                                <p>03 Hours ago</p>
+                            </div>
+                        </div>
+                        <div class="media post_item">
+                            <img src="assets/img/post/post_4.png" alt="post">
+                            <div class="media-body">
+                                <a href="blog_details.html">
+                                    <h3 style="color: #2d2d2d;">Asteroids telescope</h3>
+                                </a>
+                                <p>01 Hours ago</p>
+                            </div>
+                        </div>
+                    </aside>
+                    <aside class="single_sidebar_widget tag_cloud_widget">
+                        <h4 class="widget_title" style="color: #2d2d2d;">Tag Clouds</h4>
+                        <ul class="list">
+                            <li>
+                                <a href="#">project</a>
+                            </li>
+                            <li>
+                                <a href="#">love</a>
+                            </li>
+                            <li>
+                                <a href="#">technology</a>
+                            </li>
+                            <li>
+                                <a href="#">travel</a>
+                            </li>
+                            <li>
+                                <a href="#">restaurant</a>
+                            </li>
+                            <li>
+                                <a href="#">life style</a>
+                            </li>
+                            <li>
+                                <a href="#">design</a>
+                            </li>
+                            <li>
+                                <a href="#">illustration</a>
+                            </li>
+                        </ul>
+                    </aside>
+
+                    <aside class="single_sidebar_widget instagram_feeds">
+                        <h4 class="widget_title" style="color: #2d2d2d;">Instagram Feeds</h4>
+                        <ul class="instagram_row flex-wrap">
+                            <li>
+                                <a href="#">
+                                    <img class="img-fluid" src="assets/img/post/post_5.png" alt="">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img class="img-fluid" src="assets/img/post/post_6.png" alt="">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img class="img-fluid" src="assets/img/post/post_7.png" alt="">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img class="img-fluid" src="assets/img/post/post_8.png" alt="">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img class="img-fluid" src="assets/img/post/post_9.png" alt="">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img class="img-fluid" src="assets/img/post/post_10.png" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                    </aside>
+                    <aside class="single_sidebar_widget newsletter_widget">
+                        <h4 class="widget_title" style="color: #2d2d2d;">Newsletter</h4>
+                        <form action="#">
+                            <div class="form-group">
+                                <input type="email" class="form-control" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Enter email'" placeholder='Enter email' required>
+                            </div>
+                            <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
+                                type="submit">Subscribe</button>
+                        </form>
+                    </aside> {% endcomment %}
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    <!-- Blog Area End -->
+</main>
+
+{% endblock content %}

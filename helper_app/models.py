@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser,BaseUserManager
-from django.db.models import Q
+from django.db.models import Q,Subquery,PositiveIntegerField
 from django.utils.translation import gettext_lazy as _
 from location_field.models.plain import PlainLocationField
 # Create your models here.
@@ -10,6 +10,9 @@ USER_TYPE = (
     ("vendor", "vendor")
 )
 
+class SubqueryCount(Subquery):
+    template = "(SELECT count(*) FROM (%(subquery)s) _count)"
+    output_field = PositiveIntegerField()
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -73,13 +76,19 @@ class OtpVerification(models.Model):
     otp = models.CharField(max_length=10,null=True,blank=True)
     
 
-
+from django.template.defaultfilters import slugify  
 class Service_category(models.Model):
     category_name = models.CharField(max_length=100)
-    category_image = models.ImageField(default="cat.png",upload_to="    /")
+    category_image = models.ImageField(default="cat.png",upload_to="profile/")
+    slug = models.SlugField(unique=True,null=True, blank=True)
 
     def __str__(self):
         return self.category_name
+
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.category_name)
+        return super().save(*args, **kwargs)
 
 Status = (('Active','Active'),('Inactive','Inactive'))
 
@@ -87,14 +96,14 @@ Status = (('Active','Active'),('Inactive','Inactive'))
 
 class Custom_ServiceManager(models.Manager):
     def get_queryset(self):
-        complexQuery = Q(is_approved=True) & Q(is_active="Active")
+        complexQuery = Q(is_approved=True) & Q(is_active=True)
         return super().get_queryset().filter(complexQuery)
 
 
 
 class Service(models.Model):
     service_image = models.FileField(upload_to="service/",null=True,blank=True,default="default.png")
-    category = models.ForeignKey(Service_category,on_delete=models.CASCADE)
+    category = models.ForeignKey(Service_category, related_name="service_cat", on_delete=models.CASCADE)
     service_name = models.CharField(max_length=100)
     price = models.FloatField()
     service_time = models.PositiveIntegerField(null=True,blank=True)
@@ -102,7 +111,8 @@ class Service(models.Model):
     city = models.CharField(max_length=255)
     location = PlainLocationField(based_fields=['city'], zoom=7)
     is_approved = models.BooleanField(default=False)
-    is_active = models.CharField(max_length=20,choices=Status,default="Active")
+    is_active = models.BooleanField(default=True)
+    vendor = models.ForeignKey(User,on_delete=models.CASCADE)
 
     objects = models.Manager()
     activate = Custom_ServiceManager()

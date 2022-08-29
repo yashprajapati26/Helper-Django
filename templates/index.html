@@ -39,8 +39,8 @@
                     {% for cat in all_cats %}
                     <div class="col-lg-4 col-md-6 col-sm-8">
                         <div class="single-services mb-30" style="background: #fbe3f8ad;">
-                            <div class="features-icon">
-                                <img class="cat_img" src="{{cat.category_image.url}}" alt="">
+                            <div class="features-icon hover-zoom">
+                                <a href="{% url 'helper_app:show_services' cat.slug %}"><img class="cat_img " src="{{cat.category_image.url}}" alt=""></a>
                             </div>
                             <div class="features-caption" style="padding-top:inherit;">
                                 <h3 class="mt-4">{{cat.category_name}}</h3>
@@ -68,11 +68,11 @@
                         <div class="properties pb-20">
                             <div class="properties__card">
                                 <div class="properties__img overlay1">
-                                    <a href="#"><img src="{{service.service_image.url}}" height=250px; alt=""></a>
+                                    <a href="{% url 'helper_app:service_details' service.id %}"><img src="{{service.service_image.url}}" height=250px; alt=""></a>
                                 </div>
                                 <div class="properties__caption">
                                     <p>{{service.category.category_name}}</p>
-                                    <h3><a href="#">{{service.service_name}}</a></h3>
+                                    <h3><a href="{% url 'helper_app:service_details' service.id %}">{{service.service_name}}</a></h3>
                                     <p>
                                         {{service.description|linebreaks|truncatechars:100 }}
 
@@ -92,7 +92,7 @@
                                             <span> ₹ {{service.price}} </span>
                                         </div>
                                     </div>
-                                    <a href="#" class="border-btn border-btn2">Find out more</a>
+                                    <a href="{% url 'helper_app:service_details' service.id %}" class="border-btn border-btn2">View</a>
                                 </div>
 
                             </div>
