@@ -76,13 +76,19 @@ class OtpVerification(models.Model):
     otp = models.CharField(max_length=10,null=True,blank=True)
     
 
-
+from django.template.defaultfilters import slugify  
 class Service_category(models.Model):
     category_name = models.CharField(max_length=100)
-    category_image = models.ImageField(default="cat.png",upload_to="    /")
+    category_image = models.ImageField(default="cat.png",upload_to="profile/")
+    slug = models.SlugField(unique=True,null=True, blank=True)
 
     def __str__(self):
         return self.category_name
+
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.category_name)
+        return super().save(*args, **kwargs)
 
 Status = (('Active','Active'),('Inactive','Inactive'))
 

@@ -2,6 +2,7 @@
 
 from django.core.mail import send_mail
 from helper_project.settings import EMAIL_HOST_USER
+from helper_project.celery import app
 
 def send_otp_verification_mail(reciver,otp):
     subject = "Helper : Email Login OTP Verification"
@@ -24,6 +25,15 @@ def send_mail_to_vendor(reciver,message):
 
 
 
+
+@app.task
+def send_mail_for_contact(reciver,message):
+    print("----------------------------")
+    subject = "Helper : Conatct You Soon"
+    message = message
+    sender = EMAIL_HOST_USER
+    reciver = reciver
+    send_mail(subject,message,sender,[reciver])
 
 
 

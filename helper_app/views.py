@@ -7,7 +7,7 @@ from django.views import View
 from helper_app.models import User,OtpVerification
 import pyotp
 from django.views.generic import TemplateView 
-from .utils import send_otp_verification_mail
+from .utils import send_mail_to_vendor, send_otp_verification_mail
 from .forms import RegisterForm
 from django.contrib.auth import login, logout
 from django.contrib import messages
@@ -23,6 +23,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.contrib.auth.forms import PasswordResetForm
 from helper_app.decorators import user_is_vendor
+from django.views.generic.detail import DetailView
 # Create your views here.
 
 @user_is_vendor
@@ -52,7 +53,7 @@ class LoginView(View):
         otpobj.otp = otp.now()
         print(otp.now())
         otpobj.save()
-        send_otp_verification_mail(reciver=email,otp=otp.now())
+        send_otp_verification_mail(reciver=email,otp=otp.now()) 
         return render(self.request,"otp_verification.html",context={'email':email})
 
 class OtpVerifyView(View):
@@ -194,21 +195,66 @@ def load_more_service(request):
         })
 from django.db.models import Count
 
-class ServiceDetailsView(View):
-    def get(self,request,service_id):
-        context = {}
-        service = Service.objects.get(pk=service_id)
-        context['service'] = service
-        context['related_service'] = Service.objects.filter(category=service.category)
-        # context['category'] = Service_category.objects.all().annotate(counts = SubqueryCount(
-        #     Service.objects.filter(category=OuterRef("pk")))).exclude(counts=0)
+class ServiceDetailsView(DetailView):
+
+    model = Service
+    template_name = 'service_details.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['service'] = self.get_object()
+        context['related_service'] = Service.objects.filter(category=self.object.category)
+        # context['category'] = Service_category.objects.all().annotate(counts = SubqueryCount(Service.objects.filter(category=OuterRef("pk")))).exclude(counts=0)
             #  ^
             # both same
             #  v
         context['category'] = Service_category.objects.annotate(counts = Count("service_cat")).exclude(counts=0)
-        return render(request,"service_details.html",context)
+
+        return context
+
+    # def get(self,request,service_id):
+    #     context = {}
+    #     service = Service.objects.get(pk=service_id)
+    #     context['service'] = service
+    #     context['related_service'] = Service.objects.filter(category=service.category)
+    #     # context['category'] = Service_category.objects.all().annotate(counts = SubqueryCount(
+    #     #     Service.objects.filter(category=OuterRef("pk")))).exclude(counts=0)
+    #         #  ^
+    #         # both same
+    #         #  v
+    #     context['category'] = Service_category.objects.annotate(counts = Count("service_cat")).exclude(counts=0)
+    #     return render(request,"service_details.html",context)
 
 
+
+class ShowServicesView(DetailView):
+
+    model = Service_category
+    template_name = 'services.html'
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+        context['all_services'] = Service.objects.filter(category=self.get_object())
+        context['from_category'] = True
+        return context
+
+
+class ContactView(View):
+    def get(self,request):
+        return render(request,"contact.html")
+
+    def post(self,request):
+        message = request.POST['message']
+        name = request.POST['name']
+        email = request.POST['email']
+        subject = request.POST['subject']
+
+        msg = '''Hey Alien!
+                         I hope you doing well , Thank You for reaching out , we will get back soon.''' 
+        send_mail_to_vendor(email,msg)
+        messages.success(request,"Submited your message.")
+        return HttpResponseRedirect(request.path_info) # for same url 
 
 
 

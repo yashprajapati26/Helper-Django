@@ -10,7 +10,7 @@ urlpatterns = [
     path("verifyotp/",views.OtpVerifyView.as_view(),name="verifyotp"),
     path("register/",views.RegisterView.as_view(),name="register"),
     path("logout/",views.LogoutView.as_view(),name="logout"),
-    
+    path("contact/",views.ContactView.as_view(),name="contact"),
     # accounts/password_reset/ [name='password_reset']
     # accounts/password_reset/done/ [name='password_reset_done']
     # accounts/reset/<uidb64>/<token>/ [name='password_reset_confirm']
@@ -23,7 +23,10 @@ urlpatterns = [
 
 
     path("services/",views.ServicesView.as_view(),name="services"),
-    path("service-details/<int:service_id>/",views.ServiceDetailsView.as_view(),name="service_details"),
+    path("service-details/<int:pk>/",views.ServiceDetailsView.as_view(),name="service_details"),
+    
+    path("show_services/<slug:slug>/",views.ShowServicesView.as_view(),name="show_services"),
+
     path("load_more_service/",views.load_more_service,name="load_more_service"),
 
 

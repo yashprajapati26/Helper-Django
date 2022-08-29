@@ -6,6 +6,9 @@ def user_is_vendor(function):
         if request.user.is_authenticated:
             if request.user.user_type == "vendor":
                 return redirect("vendor_app:home")
+            else:
+                return function(request, *args, **kwargs)
+
         else:
             return function(request, *args, **kwargs)
     return wrap
