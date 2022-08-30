@@ -201,9 +201,10 @@ class ServiceDetailsView(DetailView):
     template_name = 'service_details.html'
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)
         context['service'] = self.get_object()
-        context['related_service'] = Service.objects.filter(category=self.object.category)
+        context['related_service'] = Service.objects.filter(category=self.object.category).exclude(pk=self.object.pk)
         # context['category'] = Service_category.objects.all().annotate(counts = SubqueryCount(Service.objects.filter(category=OuterRef("pk")))).exclude(counts=0)
             #  ^
             # both same

@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3tib2szg05m6x#!731fwbz%xh%9i*_3f3##bmdwv(4)2jy#0^h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*','.herokuapp.com']
 
@@ -96,27 +96,27 @@ WSGI_APPLICATION = 'helper_project.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': 'test_db_2',
-#        'USER': 'postgres',
-#        'PASSWORD': 'agc123',
-#        'HOST': 'localhost',
-#        'PORT': '5432',
-#    }
-# }
-
 DATABASES = {
    'default': {
-       'ENGINE': 'django.contrib.gis.db.backends.postgis',
-       'NAME': 'test_db_3',
+       'ENGINE': 'django.db.backends.postgresql',
+       'NAME': 'test_db_2',
        'USER': 'postgres',
        'PASSWORD': 'agc123',
        'HOST': 'localhost',
        'PORT': '5432',
    }
 }
+
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#        'NAME': 'test_db_3',
+#        'USER': 'postgres',
+#        'PASSWORD': 'agc123',
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#    }
+# }
 # test_db
 
 
