@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser,BaseUserManager
 from django.db.models import Q,Subquery,PositiveIntegerField
 from django.utils.translation import gettext_lazy as _
 from location_field.models.plain import PlainLocationField
+from django.template.defaultfilters import slugify  
+
 # Create your models here.
 
 USER_TYPE = (
@@ -76,7 +78,6 @@ class OtpVerification(models.Model):
     otp = models.CharField(max_length=10,null=True,blank=True)
     
 
-from django.template.defaultfilters import slugify  
 class Service_category(models.Model):
     category_name = models.CharField(max_length=100)
     category_image = models.ImageField(default="cat.png",upload_to="profile/")
