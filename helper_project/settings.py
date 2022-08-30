@@ -169,8 +169,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "helper_app.User"
 
-
+GDAL_LIBRARY_PATH = ''
 # EMAIL_HOST_USER= 'my422kingheart.2728@gmail.com'
+
 # EMAIL_HOST_PASSWORD= 'wuyghwxrgvwnnixs'
 
 
