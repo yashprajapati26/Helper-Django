@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3tib2szg05m6x#!731fwbz%xh%9i*_3f3##bmdwv(4)2jy#0^h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*',]
+ALLOWED_HOSTS = ['*','.herokuapp.com']
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
@@ -96,27 +96,27 @@ WSGI_APPLICATION = 'helper_project.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-DATABASES = {
-   'default': {
-       'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'test_db_2',
-       'USER': 'postgres',
-       'PASSWORD': 'agc123',
-       'HOST': 'localhost',
-       'PORT': '5432',
-   }
-}
-
 # DATABASES = {
 #    'default': {
-#        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#        'NAME': 'test_db_3',
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'test_db_2',
 #        'USER': 'postgres',
 #        'PASSWORD': 'agc123',
 #        'HOST': 'localhost',
 #        'PORT': '5432',
 #    }
 # }
+
+DATABASES = {
+   'default': {
+       'ENGINE': 'django.contrib.gis.db.backends.postgis',
+       'NAME': 'test_db_3',
+       'USER': 'postgres',
+       'PASSWORD': 'agc123',
+       'HOST': 'localhost',
+       'PORT': '5432',
+   }
+}
 # test_db
 
 
@@ -169,8 +169,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "helper_app.User"
 
-
+GDAL_LIBRARY_PATH = ''
 # EMAIL_HOST_USER= 'my422kingheart.2728@gmail.com'
+
 # EMAIL_HOST_PASSWORD= 'wuyghwxrgvwnnixs'
 
 
@@ -241,3 +242,4 @@ REST_FRAMEWORK = {
 
 
 APPEND_SLASH=False
+# GEOS_LIBRARY_PATH = ''
