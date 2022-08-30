@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os
 from pathlib import Path
+import environ
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3tib2szg05m6x#!731fwbz%xh%9i*_3f3##bmdwv(4)2jy#0^h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*','.herokuapp.com']
 
@@ -92,32 +96,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'helper_project.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': 'test_db_2',
-#        'USER': 'postgres',
-#        'PASSWORD': 'agc123',
-#        'HOST': 'localhost',
-#        'PORT': '5432',
-#    }
-# }
-
 DATABASES = {
    'default': {
-       'ENGINE': 'django.contrib.gis.db.backends.postgis',
-       'NAME': 'test_db_3',
+       'ENGINE': 'django.db.backends.postgresql',
+       'NAME': 'test_db_2',
        'USER': 'postgres',
        'PASSWORD': 'agc123',
        'HOST': 'localhost',
        'PORT': '5432',
    }
 }
-# test_db
 
 
 # Password validation
@@ -169,12 +157,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "helper_app.User"
 
-GDAL_LIBRARY_PATH = ''
-# EMAIL_HOST_USER= 'my422kingheart.2728@gmail.com'
-
-# EMAIL_HOST_PASSWORD= 'wuyghwxrgvwnnixs'
-
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -184,50 +166,10 @@ EMAIL_HOST_USER = 'projectPY2@gmail.com'
 EMAIL_HOST_PASSWORD = 'qhkbtgmlavcsqfpp'
 
 
-
-# LOCATION_FIELD = {
-#     'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
-#     'provider.google.api_key': 'promising-lamp-357010',
-#     'provider.google.api_libraries': '',
-#     'provider.google.map.type': 'ROADMAP',
-# }
 LOCATION_FIELD = {
     'map.provider': 'openstreetmap',
     'search.provider': 'nominatim',
 }
-# LOCATION_FIELD_PATH = settings.STATIC_URL + 'location_field'
-#
-# LOCATION_FIELD = {
-#     'map.provider': 'google',
-#     'map.zoom': 13,
-#
-#     'search.provider': 'google',
-#     'search.suffix': '',
-#
-#     # Google
-#     'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
-#     'provider.google.api_key': 'promising-lamp-357010',
-#     'provider.google.api_libraries': '',
-#     'provider.google.map.type': 'ROADMAP',
-#
-#     # Mapbox
-#     'provider.mapbox.access_token': 'https://oauth2.googleapis.com/token',
-#     'provider.mapbox.max_zoom': 18,
-#     'provider.mapbox.id': 'mapbox.streets',
-#
-#     # OpenStreetMap
-#     'provider.openstreetmap.max_zoom': 18,
-#
-#     # misc
-#     'resources.root_path': LOCATION_FIELD_PATH,
-#     'resources.media': {
-#         'js': (
-#             LOCATION_FIELD_PATH + '/js/form.js',
-#         ),
-#     },
-# }
-# GEOS_LIBRARY_PATH = ''
-
 
 ##############################################
 ######  for Django rest api permissions ######
@@ -242,4 +184,3 @@ REST_FRAMEWORK = {
 
 
 APPEND_SLASH=False
-# GEOS_LIBRARY_PATH = ''
