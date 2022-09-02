@@ -25,7 +25,7 @@ from django.contrib.auth.forms import PasswordResetForm
 from helper_app.decorators import user_is_vendor
 from django.views.generic.detail import DetailView
 # Create your views here.
-
+from django.contrib.auth.decorators import login_required
 @user_is_vendor
 def index(request):
     # if request.user.user_type == "vendor":
@@ -256,6 +256,46 @@ class ContactView(View):
         send_mail_to_vendor(email,msg)
         messages.success(request,"Submited your message.")
         return HttpResponseRedirect(request.path_info) # for same url 
+
+
+
+
+##################################################################
+# check location which is enter inh pop box
+
+
+def check_location(request):
+     if request.headers.get('x-requested-with') == 'XMLHttpRequest' and request.method == 'POST':
+        city = request.POST.get('city')
+        pincode = request.POST.get('pincode')
+
+        service_url = request.META.get('HTTP_REFERER')
+        service_id = service_url.split('/')[-2]
+
+        service = Service.objects.get(pk=service_id)        
+
+        # remaing to check location , right now we go ahed for next process 
+        next_url = reverse("helper_app:checkout",args=[service_id])
+        print(next_url)
+        return JsonResponse({
+            "status": "success",
+            "next_url" : next_url,
+        })
+
+
+import datetime
+def checkout(request,pk):
+    service = Service.objects.get(pk=pk)
+    print(service)
+    today = datetime.date.today()
+    print(today)
+    context = {'service':service,'today':today}
+    return render(request,"checkout.html",context)
+
+
+
+
+
 
 
 

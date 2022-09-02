@@ -3,6 +3,7 @@
 from django.core.mail import send_mail
 from helper_project.settings import EMAIL_HOST_USER
 from helper_project.celery import app
+from .models import User
 
 def send_otp_verification_mail(reciver,otp):
     subject = "Helper : Email Login OTP Verification"
@@ -37,11 +38,14 @@ def send_mail_for_contact(reciver,message):
 
 
 
+@app.task   
+def send_mail_by_admin():
 
-# def sendmail(subject,template,to,context):
-#     subject = subject
-#     template_str = template+'.html'
-#     html_message = render_to_string(template_str, {'data': context})
-#     plain_message = strip_tags(html_message)
-#     from_email = 'projectPY2@gmail.com'
-#     send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+    users = User.objects.all()
+
+    for user in users:
+        subject = "Hii !! Celery Testing"
+        message = "If you are liking please must try celery in django"
+        to = user.email
+        from_email = EMAIL_HOST_USER
+        send_mail(subject, message, from_email, [to])

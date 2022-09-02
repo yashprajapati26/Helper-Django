@@ -1,6 +1,28 @@
 {% extends 'header.html' %}
 {% load static %}
 {% block content %}
+{% comment %}
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.css">
+
+<link rel="stylesheet" href="style.css" />
+
+<!-- Angular Material Dependencies -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+
+<!-- Angular Material Javascript now available via Google CDN; version 0.8 used here -->
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.js"></script>
+
+<style>
+    a:hover {
+        color: black;
+    }
+
+    .dialogdemoThemeInheritance .container {
+        text-align: center;
+    }
+</style> {% endcomment %}
 <main>
     <!--? slider Area Start-->
     <section class="slider-area slider-area2">
@@ -42,9 +64,6 @@
 
                                 </a>
                             </div>
-
-
-
                         </article>
 
                     </div>
@@ -70,9 +89,58 @@
                             </ul>
                             <ul class="blog-info-link mt-5">
                                 <li><button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
-                                        type="submit">Book service</button></li>
+                                        type="submit" data-toggle="modal" data-target="#exampleModal"
+                                        data-whatever="@getbootstrap">Book service</button></li>
                             </ul>
+
+                            <!-- [pop up box] -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog-centered modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Select Your Location</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form method="POST" id="myform" data-url="{% url 'helper_app:check_location' %}">
+                                            {% csrf_token %}
+                                        <div class="modal-body">
+                                           
+                                                <div class="form-group" style="display: flex;
+                                                justify-content: space-between;
+                                                padding: 5px;">
+                                                    <label for="recipient-name"
+                                                        class="col-form-label">City:</label>
+                                                    <input type="text" class="form-control" id="recipient-name" style="margin:3px 10px 0px 10px;" name="city">
+                                                </div>
+                                                <div class="form-group" style="display: flex;
+                                                justify-content: space-between;
+                                                padding: 5px;">
+                                                    <label for="message-text" class="col-form-label">Pincode:</label>
+                                                    <input type="text" class="form-control" id="recipient-name" style="margin:3px 10px 0px 10px;" name="pincode">
+                                                </div>
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Next</button>
+                                        </div>
+                                    </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        
+
                         </div>
+                        {% comment %}
+                        <div ng-app="myApp" ng-controller="myCtrl">
+                            <button ng-click="openDialog()">Open</button>
+                        </div>
+
+                        {% endcomment %}
+
 
                         {% comment %} <aside class="single_sidebar_widget search_widget">
                             <form action="#">
@@ -215,19 +283,34 @@
                     <div class="services-area services-area2 section-padding40">
                         <div class="container">
                             <div class="row">
+                                <h1 class="font-weight-bold" style="color: #2d2d2d;">Related Service's</h1>
+
                                 {% for service in related_service %}
                                 <div class="col-12">
                                     <div class="single-services mb-30">
                                         <div class="features-icon" style="margin-top:-10px;">
-                                            <img src="{{service.service_image.url}}" height=150px; width=180px; alt="">
+                                            <a href="{% url 'helper_app:service_details' service.id %}"><img
+                                                    src="{{service.service_image.url}}" height=180px; width=170px;
+                                                    alt=""></a>
                                         </div>
                                         <div class="features-caption">
-                                            <h3>{{service.service_name}}</h3>
-                                            <p><i class="bi-tag-fill"></i> {{service.category.category_name}}</p>
-                                            
-                                            <p>{{service.description|linebreaks|truncatechars:100}}</p>
-                                            <p>₹ {{service.price}}</p>
+                                            {% comment %} <a class="myclass"
+                                                href="{% url 'helper_app:service_details' service.id %}">
+                                                {% endcomment %}
+                                                <h3>{{service.service_name}}</h3>
+                                                <p><i class="bi-tag-fill"></i> {{service.category.category_name}}</p>
+
+                                                <p>{{service.description|linebreaks|truncatechars:60}}</p>
+                                                <p>₹ {{service.price}}</p>
+                                                {% comment %}
+                                            </a> {% endcomment %}
+
+                                            <div>
+                                                <a href="{% url 'helper_app:service_details' service.id %}"><button
+                                                        class="genric-btn info mt-3">view</button></a>
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -242,7 +325,7 @@
                             <ul class="list cat-list">
                                 {% for cat in category %}
                                 <li>
-                                    <a href="#" class="d-flex">
+                                    <a href="{% url 'helper_app:show_services' cat.slug %}" class="d-flex">
                                         <p>{{cat.category_name}}</p>
                                         <p> ({{cat.counts}}) </p>
                                     </a>
@@ -255,7 +338,392 @@
             </div>
         </div>
     </section>
+
+
+
+
+
+
+
+    {% comment %}
+
+    <section>
+        <div tabindex="-1"
+            class="css-1dbjc4n r-14lw9ot r-1867qdf r-13awgt0 r-1wbh5a2 r-p1pxzi r-1udh08x r-1mdbw0j r-ipm5af"
+            style="border-top-left-radius: 16px; border-top-right-radius: 16px; height: 483px; max-height: 90vh; min-height: 360px; width: 928px;">
+            <div id="scroller" style="height: 100%; width: 100%; overflow: auto;">
+                <div class="css-1dbjc4n r-1niwhzg r-1pi2tsx r-pm9dpa r-1mdbw0j r-gy4na3 r-9aemit r-wk8lta r-13qz1uu">
+                    <div class="css-1dbjc4n r-1pi2tsx r-13qz1uu">
+                        <div class="css-1dbjc4n r-1awozwy r-1pi2tsx r-1777fci r-13qz1uu">
+                            <div class="css-1dbjc4n r-18u37iz r-1pi2tsx r-13qz1uu">
+                                <div class="css-1dbjc4n r-1iusvr4 r-16y2uox r-1wbh5a2">
+                                    <div class="sc-AxjAm bcMPWx">
+                                        <div class="css-1dbjc4n r-150rngu r-eqz5dr r-16y2uox r-1wbh5a2 r-11yh6sk r-1rnoaur r-1sncvnh"
+                                            style="touch-action: auto; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                                            <div class="css-1dbjc4n">
+                                                <div class="css-1dbjc4n">
+                                                    <div class="css-1dbjc4n">
+                                                        <div class="css-1dbjc4n r-13qz1uu" style="height: 640px;">
+                                                            <div id="container" class="MapComponent__wrapper--1U1z_"
+                                                                style="height: 100%;">
+                                                                <div class="Map__mapContainer--18OTy">
+                                                                    <div class="Map__map--t-zo5">
+                                                                        <div style="height: 100%; width: 100%;">
+                                                                            <div
+                                                                                style="overflow: hidden; width: 529px; height: 640px;">
+                                                                                <img src="https://maps.googleapis.com/maps/api/js/StaticMapService.GetMapImage?1m2&amp;1i23539340&amp;2i14569198&amp;2e1&amp;3u17&amp;4m2&amp;1u529&amp;2u640&amp;5m6&amp;1e0&amp;5sen&amp;6sus&amp;10b1&amp;12b1&amp;14i1379903&amp;key=AIzaSyBltEHH1NSb-gS9fT0Jx48cQw59vOH_jH0&amp;token=126106"
+                                                                                    style="width: 529px; height: 640px;">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="Map__currentLocationContainer--2kTcz">
+                                                                        <div
+                                                                            class="CurrentLocationMarker__container--2i1Y7">
+                                                                            <div
+                                                                                class="CurrentLocationMarker__icon--Et9BU">
+                                                                                <svg width="100%" height="100%"
+                                                                                    viewBox="0 0 48 48" fill=""
+                                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path fill-rule="evenodd"
+                                                                                        clip-rule="evenodd"
+                                                                                        d="M25 31.97c8.37-.517 15-7.47 15-15.97 0-8.837-7.163-16-16-16S8 7.163 8 16c0 8.5 6.63 15.453 15 15.97V48h2V31.97z"
+                                                                                        fill="#183DD3"></path>
+                                                                                    <path
+                                                                                        d="M24 22a6 6 0 100-12 6 6 0 000 12z"
+                                                                                        fill="#fff"></path>
+                                                                                </svg></div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="Map__icon--8SY8F"><svg width="100%"
+                                                                            height="100%" viewBox="0 0 20 20" fill=""
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path fill-rule="evenodd"
+                                                                                clip-rule="evenodd"
+                                                                                d="M9.063 3.504V5h1.874V3.504a6.567 6.567 0 015.559 5.559H15v1.874h1.496a6.567 6.567 0 01-5.558 5.559V15H9.062v1.496a6.567 6.567 0 01-5.558-5.558H5V9.062H3.504a6.567 6.567 0 015.559-5.558zm0-1.89a8.44 8.44 0 00-7.449 7.449H0v1.874h1.614a8.44 8.44 0 007.449 7.449V20h1.874v-1.614a8.44 8.44 0 007.449-7.448H20V9.062h-1.614a8.44 8.44 0 00-7.448-7.448V0H9.062v1.614zM10 8.438a1.563 1.563 0 100 3.125 1.563 1.563 0 000-3.126zM6.562 10a3.437 3.437 0 116.875 0 3.437 3.437 0 01-6.874 0z"
+                                                                                fill="#0F0F0F"></path>
+                                                                        </svg></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="css-1dbjc4n r-29t8mp">
+                                    <div class="sc-AxjAm bcMPWx">
+                                        <div class="css-1dbjc4n r-150rngu r-eqz5dr r-16y2uox r-1wbh5a2 r-11yh6sk r-1rnoaur r-1sncvnh"
+                                            style="touch-action: auto; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); margin-bottom: 66px;">
+                                            <div class="css-1dbjc4n">
+                                                <div class="css-1dbjc4n">
+                                                    <div class="css-1dbjc4n">
+                                                        <div tabindex="0"
+                                                            class="css-1dbjc4n r-14lw9ot r-17gur6a r-1loqt21 r-ymttw5 r-1otgn73 r-1i6wzkk r-lrvibr r-13qz1uu"
+                                                            style="transition-duration: 0.25s;">
+                                                            <div class="css-1dbjc4n r-1472mwg r-lrsllp"
+                                                                data-testid="space"></div>
+                                                            <div class="css-1dbjc4n r-1udh08x r-13qz1uu">
+                                                                <div class="css-1dbjc4n r-1udh08x r-13qz1uu">
+                                                                    <div
+                                                                        class="css-1dbjc4n r-1habvwh r-18u37iz r-1wtj0ep r-13qz1uu">
+                                                                        <div
+                                                                            class="css-1dbjc4n r-1habvwh r-13awgt0 r-eqz5dr r-1777fci r-13qz1uu">
+                                                                            <div dir="auto"
+                                                                                class="css-901oao css-cens5h r-1qimiim r-144iecu r-ubezar r-1kfrs79 r-135wba7 r-fdjqy7 r-13wfysu r-3twk1y r-13qz1uu"
+                                                                                style="-webkit-line-clamp: 2;">
+                                                                                University Rd</div>
+                                                                            <div class="css-1dbjc4n r-hdaws3 r-10g5efv"
+                                                                                data-testid="space"></div>
+                                                                            <div dir="auto"
+                                                                                class="css-901oao css-cens5h r-ogrl0h r-1ej5qbt r-1b43r93 r-16dba41 r-135wba7 r-fdjqy7 r-13wfysu r-3twk1y"
+                                                                                style="-webkit-line-clamp: 2;">
+                                                                                University Rd, University Area,
+                                                                                Ahmedabad, Gujarat 380009, India</div>
+                                                                        </div>
+                                                                        <div class="css-1dbjc4n r-10ptun7 r-1janqcz"
+                                                                            data-testid="space"></div>
+                                                                        <div
+                                                                            class="css-1dbjc4n r-1niwhzg r-eqz5dr r-mk0yit r-rjfia">
+                                                                            <div
+                                                                                class="css-1dbjc4n r-1habvwh r-11wrixw r-1mnahxq">
+                                                                                <div aria-label="Button Double Tap to perform action"
+                                                                                    role="button" tabindex="0"
+                                                                                    class="css-18t94o4 css-1dbjc4n r-1loqt21 r-1otgn73 r-1i6wzkk r-lrvibr"
+                                                                                    data-testid="defaultButton"
+                                                                                    style="transition-duration: 0s;">
+                                                                                    <div
+                                                                                        class="css-1dbjc4n r-1awozwy r-14lw9ot r-wh77r2 r-1xfd6ze r-1phboty r-rs99b7 r-18u37iz r-1r8g8re r-1777fci r-ymttw5 r-1rcbeiy r-iyfy8q">
+                                                                                        <div
+                                                                                            class="css-1dbjc4n r-1awozwy r-18u37iz">
+                                                                                            <div class="css-1dbjc4n"
+                                                                                                data-testid="TextContainer"
+                                                                                                style="opacity: 1;">
+                                                                                                <div dir="auto"
+                                                                                                    class="css-901oao css-cens5h r-1qimiim r-144iecu r-1b43r93 r-1kfrs79 r-rjixqe r-13wfysu r-3twk1y"
+                                                                                                    style="-webkit-line-clamp: 1; text-align: center;">
+                                                                                                    Change</div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="css-1dbjc4n r-1udh08x r-13qz1uu">
+                                                                    <div class="css-1dbjc4n r-10ptun7 r-1janqcz"
+                                                                        data-testid="space"></div>
+                                                                    <div class="css-1dbjc4n r-q3muym r-13qz1uu"
+                                                                        style="align-self: center; height: 1px;"></div>
+                                                                </div>
+                                                                <div class="css-1dbjc4n r-1udh08x r-13qz1uu">
+                                                                    <div class="css-1dbjc4n r-10ptun7 r-1janqcz"
+                                                                        data-testid="space"></div>
+                                                                    <div class="css-1dbjc4n r-13qz1uu"
+                                                                        data-testid="defaultInputFieldContainer">
+                                                                        <div
+                                                                            class="css-1dbjc4n r-1awozwy r-14lw9ot r-wh77r2 r-1xfd6ze r-1phboty r-rs99b7 r-18u37iz r-h3s6tt r-1777fci r-1qhn6m8 r-1pyaxff r-13qz1uu">
+                                                                            <div
+                                                                                class="css-1dbjc4n r-1habvwh r-13awgt0 r-eqz5dr r-h3s6tt r-1777fci r-23eiwj">
+                                                                                <div class="css-1dbjc4n r-13qz1uu">
+                                                                                    <input
+                                                                                        placeholder="House/Flat Number*"
+                                                                                        autocapitalize="sentences"
+                                                                                        autocomplete="on"
+                                                                                        autocorrect="on" dir="auto"
+                                                                                        spellcheck="true" type="text"
+                                                                                        class="css-11aywtz r-1ej5qbt r-1b43r93 r-16dba41 r-z80fyv r-rjixqe r-t60dpp r-r2ljc4 r-fdjqy7"
+                                                                                        data-testid="textInput"
+                                                                                        value=""></div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="css-1dbjc4n r-1awozwy r-18u37iz r-1777fci r-23eiwj">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="css-1dbjc4n r-1udh08x r-13qz1uu">
+                                                                    <div class="css-1dbjc4n r-10ptun7 r-1janqcz"
+                                                                        data-testid="space"></div>
+                                                                    <div class="css-1dbjc4n r-13qz1uu"
+                                                                        data-testid="defaultInputFieldContainer">
+                                                                        <div
+                                                                            class="css-1dbjc4n r-1awozwy r-14lw9ot r-wh77r2 r-1xfd6ze r-1phboty r-rs99b7 r-18u37iz r-h3s6tt r-1777fci r-1qhn6m8 r-1pyaxff r-13qz1uu">
+                                                                            <div
+                                                                                class="css-1dbjc4n r-1habvwh r-13awgt0 r-eqz5dr r-h3s6tt r-1777fci r-23eiwj">
+                                                                                <div class="css-1dbjc4n r-13qz1uu">
+                                                                                    <input
+                                                                                        placeholder="Landmark (Optional)"
+                                                                                        autocapitalize="sentences"
+                                                                                        autocomplete="on"
+                                                                                        autocorrect="on" dir="auto"
+                                                                                        spellcheck="true" type="text"
+                                                                                        class="css-11aywtz r-1ej5qbt r-1b43r93 r-16dba41 r-z80fyv r-rjixqe r-t60dpp r-r2ljc4 r-fdjqy7"
+                                                                                        data-testid="textInput"
+                                                                                        value=""></div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="css-1dbjc4n r-1awozwy r-18u37iz r-1777fci r-23eiwj">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="css-1dbjc4n r-1udh08x r-13qz1uu">
+                                                                    <div class="css-1dbjc4n r-10ptun7 r-1janqcz"
+                                                                        data-testid="space"></div>
+                                                                    <div class="css-1dbjc4n r-13qz1uu"
+                                                                        data-testid="defaultInputFieldContainer">
+                                                                        <div
+                                                                            class="css-1dbjc4n r-1awozwy r-14lw9ot r-wh77r2 r-1xfd6ze r-1phboty r-rs99b7 r-18u37iz r-h3s6tt r-1777fci r-1qhn6m8 r-1pyaxff r-13qz1uu">
+                                                                            <div
+                                                                                class="css-1dbjc4n r-1habvwh r-13awgt0 r-eqz5dr r-h3s6tt r-1777fci r-23eiwj">
+                                                                                <div class="css-1dbjc4n r-13qz1uu">
+                                                                                    <input placeholder="Name"
+                                                                                        autocapitalize="sentences"
+                                                                                        autocomplete="on"
+                                                                                        autocorrect="on" dir="auto"
+                                                                                        spellcheck="true" type="text"
+                                                                                        class="css-11aywtz r-1ej5qbt r-1b43r93 r-16dba41 r-z80fyv r-rjixqe r-t60dpp r-r2ljc4 r-fdjqy7"
+                                                                                        data-testid="textInput"
+                                                                                        value=""></div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="css-1dbjc4n r-1awozwy r-18u37iz r-1777fci r-23eiwj">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="css-1dbjc4n r-1udh08x r-13qz1uu">
+                                                                    <div class="css-1dbjc4n r-10ptun7 r-1janqcz"
+                                                                        data-testid="space"></div>
+                                                                    <div class="css-1dbjc4n r-13qz1uu">
+                                                                        <div class="css-1dbjc4n r-5oul0u">
+                                                                            <div dir="auto"
+                                                                                class="css-901oao r-ogrl0h r-1ej5qbt r-1b43r93 r-16dba41 r-135wba7 r-fdjqy7 r-13wfysu r-3twk1y">
+                                                                                Save as</div>
+                                                                        </div>
+                                                                        <div class="css-1dbjc4n r-150rngu r-18u37iz r-16y2uox r-1wbh5a2 r-lltvgl r-buy8e9 r-1sncvnh"
+                                                                            style="touch-action: auto; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                                                                            <div class="css-1dbjc4n r-18u37iz">
+                                                                                <div tabindex="0"
+                                                                                    class="css-1dbjc4n r-1awozwy r-cb25cm r-6ifuk6 r-1xfd6ze r-1phboty r-rs99b7 r-1loqt21 r-18u37iz r-1r8g8re r-1777fci r-1kb76zh r-1e081e0 r-oyd9sg r-1otgn73 r-1i6wzkk r-lrvibr"
+                                                                                    style="transition-duration: 0s;">
+                                                                                    <div dir="auto"
+                                                                                        class="css-901oao r-1qimiim r-144iecu r-1b43r93 r-1kfrs79 r-rjixqe r-fdjqy7 r-13wfysu r-3twk1y">
+                                                                                        Home</div>
+                                                                                </div>
+                                                                                <div tabindex="0"
+                                                                                    class="css-1dbjc4n r-1awozwy r-14lw9ot r-wh77r2 r-1xfd6ze r-1phboty r-rs99b7 r-1loqt21 r-18u37iz r-1r8g8re r-1777fci r-1kb76zh r-1e081e0 r-oyd9sg r-1otgn73 r-1i6wzkk r-lrvibr"
+                                                                                    style="transition-duration: 0s;">
+                                                                                    <div dir="auto"
+                                                                                        class="css-901oao r-zyhucb r-144iecu r-1b43r93 r-1kfrs79 r-rjixqe r-fdjqy7 r-13wfysu r-3twk1y">
+                                                                                        Other</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="css-1dbjc4n r-1472mwg r-lrsllp"
+                                                                data-testid="space"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="css-1dbjc4n r-wh77r2 r-1phboty r-5kkj8d r-1yadl64 r-1p0dtai r-6bmjti r-hqy403 r-1d2f490 r-u8s1d r-zchlnj r-13qz1uu r-mhe3cw">
+                                            <div class="css-1dbjc4n">
+                                                <div class="css-1dbjc4n r-q3muym r-13qz1uu"
+                                                    style="align-self: center; height: 1px;"></div>
+                                            </div>
+                                            <div class="css-1dbjc4n"></div>
+                                            <div class="css-1dbjc4n">
+                                                <div class="css-1dbjc4n r-14lw9ot">
+                                                    <div
+                                                        class="css-1dbjc4n r-1awozwy r-18u37iz r-ymttw5 r-5njf8e r-13qz1uu">
+                                                        <div class="css-1dbjc4n r-13awgt0"
+                                                            data-testid="buttonStackContainer">
+                                                            <div
+                                                                class="css-1dbjc4n r-14lw9ot r-eqz5dr r-mk0yit r-rjfia">
+                                                                <div class="css-1dbjc4n r-1oszu61 r-11wrixw r-1mnahxq">
+                                                                    <div aria-disabled="true"
+                                                                        aria-label="Button Double Tap to perform action"
+                                                                        role="button" tabindex="-1"
+                                                                        class="css-1dbjc4n r-1i6wzkk r-lrvibr"
+                                                                        data-testid="defaultButton"
+                                                                        style="transition-duration: 0s;">
+                                                                        <div
+                                                                            class="css-1dbjc4n r-1awozwy r-15282we r-1xfd6ze r-18u37iz r-h3s6tt r-1777fci r-ymttw5 r-23eiwj r-13qz1uu">
+                                                                            <div
+                                                                                class="css-1dbjc4n r-1awozwy r-18u37iz">
+                                                                                <div class="css-1dbjc4n"
+                                                                                    data-testid="TextContainer"
+                                                                                    style="opacity: 1;">
+                                                                                    <div dir="auto"
+                                                                                        class="css-901oao css-cens5h r-144iecu r-1b43r93 r-1kfrs79 r-rjixqe r-13wfysu r-3twk1y"
+                                                                                        style="-webkit-line-clamp: 1; color: rgb(176, 176, 176); text-align: center;">
+                                                                                        Save and proceed to slots</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    style="display: none; flex-direction: column; position: fixed; inset: 0px; z-index: 9999; align-items: center; background-color: transparent;">
+                    <div tabindex="-1" class="css-1dbjc4n r-13awgt0 r-13qz1uu">
+                        <div tabindex="0" class="css-1dbjc4n r-1pi2tsx r-13qz1uu"
+                            style="background-color: rgba(0, 0, 0, 0.8);">
+                            <div tabindex="0"
+                                class="css-1dbjc4n r-1awozwy r-1iusvr4 r-16y2uox r-1wbh5a2 r-17s6mgv r-1mnahxq">
+                                <div tabindex="0" class="css-1dbjc4n r-1awozwy r-pm9dpa r-8b044c"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> {% endcomment %}
     <!-- Blog Area End -->
 </main>
+
+{% comment %}
+<script>
+    var app = angular.module('myApp', ['ngMaterial']);
+
+    app.controller('myCtrl', function ($scope, $mdDialog, $timeout) {
+
+        $scope.openDialog = function () {
+            $mdDialog.show({
+                controller: function ($scope, $mdDialog) {
+                    // do something with dialog scope
+                },
+                template: '<p>Lorem ipsum dolor sit amet, consectetuer adipiscing \
+            elit. Aenean commodo ligula eget dolor. Aenean massa \
+            <strong>strong</strong>. Cum sociis natoque penatibus \
+            et magnis dis parturient montes, nascetur ridiculus \
+            mus. Donec quam felis, ultricies nec, pellentesque \
+            eu, pretium quis, sem. Nulla consequat massa quis \
+            enim. Donec pede justo, fringilla vel, aliquet nec, \
+            vulputate eget, arcu. In enim justo, rhoncus ut, \
+            imperdiet a, venenatis vitae, justo. Nullam dictum \
+            felis eu pede <a class="external ext" href="#">link</a> \
+            mollis pretium. Integer tincidunt. Cras dapibus. \
+            Vivamus elementum semper nisi. Aenean vulputate \
+            eleifend tellus. Aenean leo ligula, porttitor eu, \
+            consequat vitae, eleifend ac, enim. Aliquam lorem ante, \
+            dapibus in, viverra quis, feugiat a, tellus. Phasellus \
+            viverra nulla ut metus varius laoreet. Quisque rutrum. \
+            Aenean imperdiet. Etiam ultricies nisi vel augue. \
+            Curabitur ullamcorper ultricies nisi.</p>'
+            });
+        }
+    });
+</script> {% endcomment %}
+
+
+<script>
+
+
+
+$(document).ready(function(){
+    $("#myform").on('submit',function(e){ 
+        
+        console.log("location form called...")
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+
+        var form = $(this);
+        var actionUrl = form.attr('data-url');
+        console.log(actionUrl);
+        
+        $.ajax({
+            type: "POST",
+            url: actionUrl,
+            data: form.serialize(), // serializes the form's elements.
+            success: function(response)
+            {
+                location.href = response['next_url']
+            },
+            error: function (response) {
+                alert(response['status']);
+            }
+        });
+        
+    });
+});
+</script>
 
 {% endblock content %}
