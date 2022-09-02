@@ -70,6 +70,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+
+    'helper_app.middleware.StackOverflowMiddleware',
 ]
 
 ROOT_URLCONF = 'helper_project.urls'
@@ -244,4 +246,8 @@ REST_FRAMEWORK = {
 
 
 APPEND_SLASH=False
+
+
+LOGIN_URL = '/login/'
+
 # GEOS_LIBRARY_PATH = ''
