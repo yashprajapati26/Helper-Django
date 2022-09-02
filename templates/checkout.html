@@ -418,6 +418,14 @@
             transform: rotate(359deg);
         }
     }
+    .gj-datepicker-md [role="right-icon"] {
+        
+        left: -25px;
+    }
+    .gj-timepicker-md [role="right-icon"] {
+        left: -25px;
+        top: 16px;
+    }
 </style>
 
 <section class="slider-area slider-area2">
@@ -489,24 +497,44 @@
 
             </div>
             <div class="row">
-                <div class="col-6"> 
+                <div class="col-6">
 
-                <div class="payment__title">
-                    City
+                    <div class="payment__title">
+                        City
+                    </div>
+                    <div class="payment__types">
+                        <input type="text" class="input txt text-validated" value="" placeholder="Enter City" />
+                    </div>
                 </div>
-                <div class="payment__types">
-                    <input type="text" class="input txt text-validated" value="" placeholder="Enter City" />
+
+                <div class="col-6">
+                    <div class="payment__title">
+                        Pincode
+                    </div>
+                    <div class="payment__types">
+                        <input type="text" class="input txt text-validated" value="" placeholder="Enter Pincode" />
+                    </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-6">
 
-                <div class="col-6"> 
-                <div class="payment__title">
-                    Pincode
+                    <div class="payment__title">
+                        Date 
+                    </div>
+                    <div class="payment__types">
+                        <input type="date" id="date-pick" class="input txt text-validated" min="{{today}}" value="" placeholder="" />
+                    </div>
                 </div>
-                <div class="payment__types">
-                    <input type="text" class="input txt text-validated" value="" placeholder="Enter Pincode" />
+
+                <div class="col-6">
+                    <div class="payment__title">
+                        Time
+                    </div>
+                    <div class="payment__types">
+                        <input type="time" id="time-pick" class="input txt text-validated" value="" placeholder="" />
+                    </div>
                 </div>
-            </div>
             </div>
 
 
@@ -620,5 +648,28 @@
         </div>
 </section>
 </div>
+<script>
+    $(document).ready(function(){
+        $('#time-pick').timepicker({
+        });
+    });
+    
+
+    $(document).ready(function () {
+        var dateToday = new Date();
+        var nextDay = new Date(dateToday);
+        nextDay.setDate(dateToday.getDate() + 1);
+    
+        $('#date-pick').datepicker({
+            format: 'dd/mm/yyyy',
+            header: true,
+            footer: true,
+            modal: true,
+            minDate: nextDay
+        });
+    });
+
+</script>
+
 {% load static %}
 {% endblock content %}

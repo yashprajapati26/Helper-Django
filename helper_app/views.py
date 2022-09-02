@@ -283,11 +283,14 @@ def check_location(request):
         })
 
 
-
+import datetime
 def checkout(request,pk):
     service = Service.objects.get(pk=pk)
     print(service)
-    return render(request,"checkout.html",{'service':service})
+    today = datetime.date.today()
+    print(today)
+    context = {'service':service,'today':today}
+    return render(request,"checkout.html",context)
 
 
 

@@ -28,8 +28,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*','.herokuapp.com']
 
+
+# celery confgrigation 
+
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # Application definition
 
@@ -52,6 +56,8 @@ INSTALLED_APPS = [
     'api_app',
     'rest_framework',
     'knox',
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -148,7 +154,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
