@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm , Form
 from .models import User
 
 
@@ -7,4 +7,4 @@ class RegisterForm(ModelForm):
         model = User
         fields = ['email','first_name','mobileno','profession','state','city']
 
-        
+ 

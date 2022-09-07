@@ -274,26 +274,14 @@ def check_location(request):
 
         service = Service.objects.get(pk=service_id)        
 
+        
         # remaing to check location , right now we go ahed for next process 
-        next_url = reverse("helper_app:checkout",args=[service_id])
+        next_url = reverse("vendor_app:checkout",args=[service_id])
         print(next_url)
         return JsonResponse({
             "status": "success",
             "next_url" : next_url,
         })
-
-
-import datetime
-def checkout(request,pk):
-    service = Service.objects.get(pk=pk)
-    print(service)
-    today = datetime.date.today()
-    print(today)
-    context = {'service':service,'today':today}
-    return render(request,"checkout.html",context)
-
-
-
 
 
 

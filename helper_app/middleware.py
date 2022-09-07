@@ -10,4 +10,5 @@ class StackOverflowMiddleware(object):
         return self.get_response(request)
     
     def process_exception(self, request, exception):
+        print(exception)
         return HttpResponse("in exception")

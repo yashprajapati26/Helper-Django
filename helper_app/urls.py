@@ -26,7 +26,6 @@ urlpatterns = [
     path("load_more_service/",views.load_more_service,name="load_more_service"),
 
     path("check_location/",views.check_location,name="check_location"),
-    path("checkout/<int:pk>/",views.checkout,name="checkout"),
 
 
     path("maptime/",views.maptime,name="maptime"),

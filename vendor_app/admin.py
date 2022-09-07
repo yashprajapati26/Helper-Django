@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-
+from vendor_app.models import Book_Service
 
 class AdminImageWidget(AdminFileWidget):
 
@@ -116,3 +116,4 @@ class ServiceAdmin(admin.ModelAdmin):
 admin.site.register(Service,ServiceAdmin)
 
 
+admin.site.register(Book_Service)
