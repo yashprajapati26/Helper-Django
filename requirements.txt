@@ -6,6 +6,7 @@ attrs==22.1.0
 backports.zoneinfo;python_version<"3.9"
 billiard==3.6.4.0
 celery==5.2.7
+django-celery-beat
 certifi==2022.6.15
 cffi==1.15.1
 click==8.1.3
