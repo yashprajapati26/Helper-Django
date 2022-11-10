@@ -77,7 +77,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
-    'helper_app.middleware.StackOverflowMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'helper_project.urls'
